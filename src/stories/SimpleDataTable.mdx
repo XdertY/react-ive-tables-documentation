@@ -1,37 +1,130 @@
+import {SimpleDataTable} from 'react-ive-tables'
+import { IntlProvider } from 'react-intl';
+import {SimpleDataTableExample} from './SimpleDataTableExample'
+import {SimpleDataTableForMD} from './SimpleDataTableForMD'
 
-<!-- Custom-MDX-Documentation.mdx -->
+export const ExampleDT = () => <>
+<IntlProvider locale={"bg-BG"} messages={{}}>
+<SimpleDataTableForMD />
+</IntlProvider>
+</>
 
-# Replacing DocsPage with custom `MDX` content
+export const ExampleContextMenuDT = () => {
+    const menuModel = [
+        {
+            label: "Update" , 
+            icon: 'pi pi-fw pi-search', 
+            command: (e) => {
+                alert("Item ready to be updated")
+            }
+        },
+        {
+            label: "Delete" , 
+            icon: 'pi pi-fw pi-trash', 
+            command: (e) => {
+                alert("Item deleted")
+            }
+        }
+    ];
+    return (<>
+        <IntlProvider locale={"bg-BG"} messages={{}}>
+        <SimpleDataTableForMD contextMenu={menuModel}/>
+        </IntlProvider>
+        </>
+    )}
 
-This file is a documentation-only `MDX`file to customize Storybook's [DocsPage](https://storybook.js.org/docs/react/writing-docs/docs-page#replacing-docspage).
+# A DataTable component with static data
 
-It can be further expanded with your own code snippets and include specific information related to your stories. 
+# <ExampleDT />
 
-For example:
+## Import
 
-import { Story } from "@storybook/addon-docs";
+```javascript 
+    import {SimpleDataTable} from 'react-ive-tables'
+```
 
-## Button
+## Basic usage
+    
+    <SimpleDataTable data={data} />
 
-Button is the primary component. It has four possible states.
+The only required prop is the <b>data</b> property: 
 
-- [Primary](#primary)
-- [Secondary](#secondary)
-- [Large](#large)
-- [Small](#small)
+```json
+data = [
+    {
+        firstName: "Foo",
+        lastName: "Bar"
+    },
+    {
+        firstName: "Foo1",
+        lastName: "Bar1"
+    },
+]
+```
+Based on that data, columns will be automatically generated using their keys as column headers.
 
-### Primary
+## Properties
+Here is a list of all available properties: 
+```ts
+    {
+        data: any,
+        setSelected? :(e:any) => void,
+        showFilters? : boolean,
+        xlsx? : string,
+        contextMenu? : MenuItem[],
+        rowEditHandler? : (element: Object) => void,
+        cellEditHandler? : (e : any) => void,
+        customEditors? : {[key: string] : JSX.Element},
+        selectionHandler?: (e: any) => void,
+        selectionMode?: DataTableSelectionModeType | undefined,
+        onRowUnselect?: (e:any) => void,
+        selectedIds?: string[],
+        specialColumn? : {[key:string]: {element: JSX.Element, handler: (rowData: any) => void}},
+        ignoreEditableColumns? : string[]
+        externalDataHandler? : (e: any[]) => void
+        ignoreColumns? : string[],
+        columnTemplate? : {[key:string]: (rowData:any) => any},
+        create? : () => void,
+        sort? : boolean
+}
+```
 
-<Story id="example-button--primary" />
+## setSelected 
+Used to define a function in the parent component that will be called when a selection in the table occurs, passing the selected element to the function.
+```javascript
+    const [selectedElement, setSelectedElement] = useState();
+const setSelected = (e:any) => {
+    setSelectedElement(e);
+}
+```
 
-### Secondary
+## showFilters
+Used to hide all the filters in the DataTable. By default it is set to true.
 
-<Story id="example-button--secondary" />
+## xlsx
+Adds a button to the header of the DataTable that exports it's contents to a .xlsx file.
 
-### Large
+## contextMenu
+Adds a context menu on right click on a row in the table. A basic context menu has structure like this: 
+```javascript
+    const menuModel = [
+        {
+            label: "Update" , 
+            icon: 'pi pi-fw pi-search', 
+            command: (e) => {
+                alert("Item ready to be updated")
+            }
+        },
+        {
+            label: "Delete" , 
+            icon: 'pi pi-fw pi-trash', 
+            command: (e) => {
+                alert("Item deleted")
+            }
+        }
+    ];
 
-<Story id="example-button--large" />
+<SimpleDataTable data={data} contextMenu={menuModel}/>
+```
 
-### Small
-
-<Story id="example-button--small" />
+# <ExampleContextMenuDT />
