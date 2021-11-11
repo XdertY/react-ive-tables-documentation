@@ -277,7 +277,17 @@ export const handlers = [
         ))
     }),
 
-    rest.post('/getTableData/:first/:limit', (req, res, ctx) => {
-        return res(ctx.json({rows: data, count: data.length}))
+    rest.post('/getTableData/:offset/:limit', (req, res, ctx) => {
+      const { limit, offset } = req.params;
+      const {filters} = req.body;
+      const currentData = JSON.parse(JSON.stringify(data));
+      const responseData = Object.keys(filters).reduce((acc, el) => {
+
+        return el !== "" ? acc.filter(item => item[el].toString().includes(filters[el])) : acc;
+      }, currentData)
+
+      const result = responseData.splice(offset, limit);
+
+      return res(ctx.json({rows: result, count: result.length}))
     })
   ]

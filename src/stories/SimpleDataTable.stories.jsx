@@ -1,6 +1,6 @@
 import React from 'react';
-import { SimpleDataTableExample } from './SimpleDataTableExample';
-import SimpleDataTableDocumentation from './SimpleDataTable.mdx' 
+import { SimpleDataTableExample } from './docs/simpleDataTable/SimpleDataTableExample';
+import SimpleDataTableDocumentation from './docs/simpleDataTable/SimpleDataTableDocs.mdx' 
 import { rest } from 'msw'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export

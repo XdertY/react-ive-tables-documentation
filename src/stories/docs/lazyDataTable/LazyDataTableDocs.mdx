@@ -1,0 +1,154 @@
+import { LazyDataTable } from 'react-ive-tables'
+import { IntlProvider } from 'react-intl';
+
+export const BasicExample = () => {
+    return (
+        <IntlProvider locale={"bg-BG"} messages={{}}>
+        <LazyDataTable dataUrl="/getTableData/"
+            columnOrder={["firstName",
+                "middleName",
+                "gender",
+                "company",
+                "email",
+                "phone"]}
+            showFilters={false}
+            refreshButton={false}
+            />
+        </IntlProvider>
+        
+    )
+}
+
+# A DataTable component that supports lazy loading of data with pagination
+
+<BasicExample/>
+
+## Import
+
+```javascript 
+    import {LazyDataTable} from 'react-ive-tables'
+```
+
+## Basic usage
+    
+    <LazyDataTable dataUrl={"${endpoint_for_data_fetching}"} columnOrder={["name", "of", "columns", "to", "show"]}/>
+
+
+## Properties
+Here is a list of all available properties: 
+```ts
+  {
+    dataUrl: string;
+    columnOrder: string[];
+    ignoreFilters?: string[];
+    specialFilters?: {
+        [key: string]: {
+            element: JSX.Element;
+            type: string;
+        };
+    };
+    specialLabels?: {
+        [key: string]: string;
+    };
+    additionalFilters?: {
+        [key: string]: any;
+    };
+    showFilters?: boolean;
+    showHeader?: boolean;
+    setSelected?: (e: any) => void;
+    contextMenu?: Object[];
+    refresher?: number;
+    rowEditHandler?: (element: Object) => void;
+    cellEditHandler?: () => void;
+    customEditors?: {
+        [key: string]: JSX.Element;
+    };
+    selectionHandler?: (e: any) => void;
+    selectionMode?: DataTableSelectionModeType | undefined;
+    selectionKey?: string;
+    onRowUnselect?: (e: any) => void;
+    selectedIds?: string[];
+    specialColumn?: {
+        [key: string]: {
+            element: JSX.Element;
+            handler: (rowData: any) => void;
+        };
+    };
+    columnTemplate?: {
+        [key: string]: (rowData: any) => any;
+    };
+    xlsx?: string;
+    refreshButton?: boolean;
+    refreshButtonCallback?: () => void;
+    formatDateToLocal?: boolean;
+    toggleSelect?: {
+        toggle: boolean;
+        handler: () => void;
+    };
+    xlsxAdditionalFilters?: () => Object[];
+    onFiltersUpdated?: any;
+    headerButtons?: HeaderButton[];
+  }
+```
+
+The only required props are the <b>dataUrl</b> and <b>columnOrder</b> properties:
+
+
+
+
+- <b>dataUrl</b>: This is the url to the endpoint, that will be returning the data. The components sends request to the backend in the format:
+  
+  $dataUrl/:offset/:limit where offset is the current first item and limit is how much items you want to load after that first item 
+  
+    Example: Let's say you have 100 items. On initial render of the table the request will look like this: $dataUrl/0/20. The api is supposed to return 20 items of data. Going through the pages
+    sends request to the api with the corresponding limit and offset. In our example this will mean that when the user goes to the second page, the request going to the api will look like this: $dataUrl/20/20 and so on.
+    The response that is expected looks like this: 
+
+```json
+    {
+    rows: [{}, {}], //every object in the array represents one row from the table and the keys of every object should be the same, because based on them the columns are rendered
+    count: number
+}
+```
+
+- <b>columnOrder</b> This is an array of the keys of the returned rows. This allows you to reodrder the columns. You can also skip columns by not including their names in the array.
+```json
+    columnOrder={["column1", "column2", "column3"]}
+```
+
+## Default properties
+From all the properties there are some with default values: 
+```ts
+    {
+    showFilters: true,
+    ignoreFilters: [],
+    showHeader: true,
+    selectionMode: undefined,
+    selectionHandler: () => 0,
+    onRowUnselect : undefined,
+    selectedIds: [],
+    columnTemplate: undefined,
+    columnOrder: undefined,
+    selectionKey: "id",
+    formatDateToLocal: true,
+    refreshButton: true,
+    headerButtons: []
+}
+```
+## showFilters 
+By default this property is set to true. It creates a filter for every column. The filtering happens on the backend. This is accomplished by sending a request to the backend, containing the filters, that the user has inputed.
+The request is the same as the one for the data loading, but this time it has body: 
+```json
+    filters: {
+    columnName1: userInput1,
+    columnName2: userInput2
+    ...
+}
+```
+
+## ignoreFilters 
+An array of columns, that will not have a filter in their header
+
+
+
+

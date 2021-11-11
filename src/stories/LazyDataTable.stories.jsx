@@ -1,4 +1,6 @@
 import { LazyDataTable } from 'react-ive-tables'
+import LazyDataTableDocumentation from './docs/lazyDataTable/LazyDataTableDocs.mdx'
+
 import { Card } from 'primereact/card'
 
 export default {
@@ -6,7 +8,7 @@ export default {
     component: LazyDataTable,
     parameters: {
         docs: {
-            page: null
+            page: LazyDataTableDocumentation
         }
     },
     // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
@@ -20,9 +22,9 @@ const Template = (args) =>
         </div>
     </div>
 
-export const Primary = Template.bind({});
+export const Basic = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Primary.args = {
+Basic.args = {
     dataUrl: "/getTableData/",
     columnOrder: ["firstName",
         "middleName",
@@ -33,5 +35,22 @@ Primary.args = {
         "gender",
         "company",
         "email",
-        "phone"]
+        "phone"],
+    showFilters: false
+};
+
+export const Filters = Template.bind({})
+Filters.args = {
+    dataUrl: "/getTableData/",
+    columnOrder: ["firstName",
+        "middleName",
+        "isActive",
+        "balance",
+        "age",
+        "eyeColor",
+        "gender",
+        "company",
+        "email",
+        "phone"],
+    showFilters: true
 };
